@@ -52,7 +52,7 @@ const poorUser = {
     name: "munna",
     balance: 0,
     addBalance(balance) {
-        console.log(this.balance + balance);
+        return this.balance + balance;
     },
 };
 const poorUser2 = {
@@ -62,3 +62,9 @@ const poorUser2 = {
         return `My new balance is: ${this.balance + balance}`;
     },
 };
+// callback func
+const arr = ["1", "4", "5", "6"];
+// const newArray = arr.map((elem: number): number => elem * elem);
+const newStringArr = arr.map((elem) => elem + elem);
+const arr2 = [1, 2, 3];
+const newArr = arr2.map((elem) => elem * elem);
