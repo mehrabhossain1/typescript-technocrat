@@ -1341,6 +1341,7 @@ type GenerisName<parameter, parameter> = [parameter, parameter];
   }
 
   const numberArr: GenericsArr<number> = [1, 2, 3, 4, 5, 5];
+
   //use generics for string []
   const friendsArr: GenericsArr<string> = [
     "Mostafizur rahaman",
