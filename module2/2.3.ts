@@ -17,7 +17,18 @@
   type GenericArray2<param> = Array<param>;
   const contacts: GenericArray2<string> = ["st", "ss"];
 
-  const user: GenericArray<{ name: string; age: number }> = [
+  //
+  type TUser = {
+    name: string;
+    age: number;
+  };
+  interface IUser {
+    name: string;
+    age: number;
+  }
+  // const user: GenericArray<{ name: string; age: number }> = [
+  // const user: GenericArray<TUser> = [
+  const user: GenericArray<IUser> = [
     {
       name: "Mehrab",
       age: 23,
