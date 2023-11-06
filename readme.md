@@ -145,7 +145,7 @@ age = "20"; // show errors on code editor ;
 
 ## Basic Types In TypeScript :
 
-- ### `String` : We can implicitly Define a type of a variable in `Typescript` as `string`
+- ### `String` : We can explicitly Define a type of a variable in `Typescript` as `string`
 
   - This type of variable on allows `string` type of data.
   - If we try to store others type of data, gets an `error` like
@@ -161,7 +161,7 @@ age = "20"; // show errors on code editor ;
   fullName = []; // array is not assignable to type string .
   ```
 
-- ### `Number` : We can implicitly Define a type of a variable in `Typescript` as `number`
+- ### `Number` : We can explicitly Define a type of a variable in `Typescript` as `number`
 
   - This type of variable on allows only `number` type of data.
   - If we try to store others type of data, gets an `error` like
@@ -179,7 +179,7 @@ age = "20"; // show errors on code editor ;
   age = []; // array is not assignable to type number .
   ```
 
-- ### `Boolean` : We can implicitly Define a type of a variable in `Typescript` as `boolean`
+- ### `Boolean` : We can explicitly Define a type of a variable in `Typescript` as `boolean`
 
   - This type of variable on allows only `boolean` type of data.
   - If we try to store others type of data, gets an `error` like
@@ -197,13 +197,13 @@ age = "20"; // show errors on code editor ;
   age = []; // array is not assignable to type number .
   ```
 
-- ### `Array` : we Can Implicitly Define a type of a variable in `Typescript` as `[]`.
+- ### `Array` : we Can explicitly Define a type of a variable in `Typescript` as `[]`.
   - This type of variable allows only `array` type of data.
   - If we try to store others type of data, gets an `error` like
     `Type 'string' is not assignable to type '[]'`
   - There are many type of array `string[], number[], boolean[], tuple ` etc.
 
-## `string[]`: we can implicitly Define a type of a variable in `TypeScript` as `string[]`
+## `string[]`: we can explicitly Define a type of a variable in `TypeScript` as `string[]`
 
 - This type of variable allows only `string type data on array `. We can't
   store others type of data on array.Also we can't store other type of data on
@@ -224,7 +224,7 @@ friends = [false, false, true]; // Error: `Type boolean is not assignable to typ
 friends.push(false); // Error: `Type boolean is not assignable to type string`
 ```
 
-## `boolean[]`: we can implicitly Define a type of a variable in `TypeScript` as `Boolean[]`
+## `boolean[]`: we can explicitly Define a type of a variable in `TypeScript` as `Boolean[]`
 
 - This type of variable allows only `boolean type data on array `. We can't
   store others type of data on array.Also we can't store other type of data on
@@ -246,7 +246,7 @@ isBoolean = "Mostafizur rahaman"; // Errors : type 'boolean' is not assignable t
 isBoolean = ["ratul hossain", "rakib hossain", 20]; // Errors : Type 'string & number' is not assignable to type boolean
 ```
 
-## `number[]`: we can implicitly Define a type of a variable in `TypeScript` as `number[]`
+## `number[]`: we can explicitly Define a type of a variable in `TypeScript` as `number[]`
 
 - This type of variable allows only `number type data on array `. We can't
   store others type of data on array.Also we can't store other type of data on
@@ -1341,7 +1341,6 @@ type GenerisName<parameter, parameter> = [parameter, parameter];
   }
 
   const numberArr: GenericsArr<number> = [1, 2, 3, 4, 5, 5];
-
   //use generics for string []
   const friendsArr: GenericsArr<string> = [
     "Mostafizur rahaman",
@@ -1711,3 +1710,542 @@ type GenerisName<parameter, parameter> = [parameter, parameter];
 
     getTodo();
     ```
+
+## <p style="color:#f00 ">Condition Type In typeScript </p>
+
+- we can create conditional type in `typescript`. by using `ternary operator.`
+- syntax :
+
+```ts
+type typeName = type1 extends type2 ? type3 : type4;
+```
+
+- ### Nestd Condition :
+- syntax:
+
+```ts
+// conditional type in typeScript :
+type a1 = string;
+type b1 = number;
+type c1 = undefined;
+
+type TUser = {
+  name: string;
+  email: string;
+};
+
+interface IUser {
+  name: string;
+  age: number;
+  phone: string;
+}
+
+// nested condition in typescript:
+type d = a1 extends b1 ? TUser : a1 extends c1 ? IUser : undefined; // type is undefined
+```
+
+- ### `Conditional Type with` Generics:
+- Example :
+
+```ts
+interface IUser {
+  name: string;
+  age: number;
+  phone: string;
+}
+
+//  checkPropertyExits
+
+type checkPropertyExits<T, Q> = T extends keyof Q ? true : false;
+
+type hasName = checkPropertyExits<"email", IUser>;
+```
+
+## `Lookup type` or `get Propertype` in typescript
+
+- we can get any property in typescript of object by using `type alias` or
+  `interface`
+- syntax:
+
+```ts
+interface IUser {
+  name: string;
+  email: string;
+  phone: number;
+}
+
+//  type getPropertyType = typeName['propertyName']
+
+type getProperType = IUser["name"]; // type is string
+type getEmailType = IUser["email"]; // type is string
+type getPhoneType = IUse["phone"]; // type is number
+```
+
+## `Mapped type ` - in TypeScript
+
+- By using mapped type in typescript we can mapped every property
+  of` type alias` or `interface`.
+- mapping syntax :
+
+```ts
+type TAreaConverted<T> = {
+  [key in keyof T]: T[key];
+};
+```
+
+- Example :
+
+```ts
+type TAreaNumber = {
+  height: number;
+  width: number;
+};
+
+// lookup Type in Typescript :
+type THeight = TAreaNumber["height"];
+
+// map to convert convert TAreaNumber to other type :
+
+// this type convert to  boolean type on . it's fixed . but we need more flexibility
+
+// type TAreaConverted = {
+//    [index in "height" | "width" | "depth"]: boolean;
+// };
+
+// use keyof and and provide a type
+// it converted only TAreaNumber key to boolean type
+// type TAreaConverted = {
+//    [key in keyof TAreaNumber]: TAreaNumber[key];
+// };
+
+type TAreaConverted<T> = {
+  [key in keyof T]: T[key];
+};
+
+const AreaString: TAreaConverted<{
+  height: string;
+  width: number;
+  depth: boolean;
+}> = {
+  height: "10vh",
+  width: 3000,
+  depth: "",
+};
+```
+
+- ## `Utility` type in TypeScript :
+
+  - ### 1. `Pick`: `Pick<objectType, unionOfObjectTypeKey>`: By using `Pick` uitily , we
+
+    can `pick` specific type from an exitings objectType.
+
+    - Pick get two parameter.
+    - `First Parameter:` get an `Object Type`
+    - `second parameter` : get an `union` of keys `name`
+    - Syntax:
+
+    ```ts
+    // extings object type :
+    interface IPerson {
+      name: string;
+      email: string;
+      age: number;
+      blood: "B+" | "B-" | "A+" | "A-" | "O+" | "O-" | "AB+" | "AB-";
+    }
+
+    // create a new type by picking specific key type from exitings object type
+
+    type IModifiedPerson = Pick<IPerson, "name" | "email" | "age">;
+    //  the type will be   ->   { name: string;  email: string;  age: number;  }
+    ```
+
+  - ### 2. `Omit<objectType, unionOfObjectKeyName>` : By using `Omit` we can create a new Type by removing `some sepecific keys` from `objecttype`
+
+    - `Omit` is opposite of `Pick`.
+    - syntax:
+
+    ```ts
+    // exiting type :
+    interface IPerson {
+       name: string;
+       email: string;
+       age: number;
+       blood: "B+" | "B-" | "A+" | "A-" | "O+" | "O-" | "AB+" | "AB-";
+    }
+
+    // create a new type with omit:
+    type IModifiedPerson = Omit<IPerson, "name" | 'email" >;
+    // it's remove 'name' and 'email' key from new Type;
+    // The new type will be:
+      /*
+       {
+          age: number,
+          blood: "B+" | "B-" | "A+" | "A-" | "O+" | "O-" | "AB+" | "AB-";
+       }
+       */
+    ```
+
+  - ### 3. `Partail<objectType>` : `Partial` make all properties `optional`.
+
+    - syntax:
+
+    ```ts
+    // exiting type:
+    interface prevType {
+      name: string;
+      age: number;
+      email: string;
+      isValid: boolean;
+    }
+
+    // new type after use Partial :
+    type partialType = Partial<prevType>;
+    // the partialType will be like below:
+
+    /* 
+       type partialType = {
+          name: string | undefined;
+          age: number | undefined;
+          email: string | undefined;
+          isValid: boolean | undefined;
+       };
+    */
+    ```
+
+  - ### 4. `Required<objectType>` : `Required` utility makes all properties `required`.
+
+    - It is the oposite of `Partial` utility.
+    - Syntax:
+
+    ```ts
+    // exiting type:
+    interface prevType {
+      name?: string;
+      age?: number;
+      email: string;
+      isValid?: boolean;
+    }
+
+    // convert all properties required with Required uitility:
+
+    type RequiredType = Required<prevType>;
+    // the new type will be like below:
+
+    /* 
+    
+        {
+             name: string;
+             age: number;
+             email: string;
+             isValid: boolean;
+       }       
+    
+    */
+    ```
+
+  - ### 5. `Readonly<prevType>`: `Readonly` utilites convert all properties `readonly`
+
+    - `readonly` only `assignable` when we declare the variable.
+    - `but` we cann't modified `readonly` property.
+    - syntax:
+
+    ```ts
+    // exiting type  :
+    interface IUser {
+      name: string;
+      age: number;
+      email: string;
+      isValid: boolean;
+    }
+
+    // make all properties readonly :
+    type ReadonlyUser = Readonly<IUser>;
+    // the type will be :
+    /*
+          type ReadonlyUser = {
+             readonly name : string; 
+             readonly age  : number; 
+             readonly email: string;
+             readonly isValid: boolean;
+    
+          }       
+       */
+
+    const user1: ReadonlyUser = {
+      name: "mostafizur rahaman",
+      email: "m@gmail.com",
+      age: 2,
+      isValid: true,
+    };
+
+    // try to modify :
+    user1.name = "ratul hossain"; // Error: cann't assign 'name' because it's readonly property.
+    ```
+
+  - ### 6. `Record<keyType, valueType>`: `Record` properties helps us to create a `flexiable` object type
+
+    - ##### Example: 1. `Record<string, string>` Here all properties will be string
+
+      because we `fixed` the type for value is `string`
+
+      ```ts
+      type TUser = Record<string, string>;
+
+      let user: TUser = {
+        a: "mostafizur",
+        b: "ratul hossain",
+        c: "ismail",
+      };
+
+      user.age = 2; // Errors: Type 'number' cann't assignable to type "string"
+      ```
+
+    - ##### Example: 2. `Record<string, number>` Here all properties will be number
+
+      because we `fixed` the type for value is `number`
+
+      ```ts
+      type TUser = Record<string, number>;
+
+      let user: TUser = {
+        a: 20,
+        b: 30,
+        c: 21,
+      };
+
+      user.d = "thirty"; // Errors: Type 'string' cann't assignable to type "number"
+      ```
+
+    - ##### Example 3: `Record<string, unknown>`: the object properties allows all types of data.
+
+      ```ts
+      type TUser = Record<string, unknown>;
+      const user1: TUser = {
+        name: "mostafizur rahaman",
+        email: "m@gmal.com",
+        age: 20,
+        isValid: true,
+        haveMoney: undefined,
+      };
+
+      user1.bike = { brand: "Yamaha", model: "Y-222" };
+      ```
+
+---
+
+---
+
+---
+
+# Object Oreinted Programming In TypeScript(OOP)
+
+## What is OOP?
+
+- A Programming Paradiam That organizes and models Software.
+- Object-oriented programming (OOP) is a programming paradigm that organizes
+  software design around objects, which are instances of classes.
+
+## What is Paradiam?
+
+- Paradiam is a `model` or `style` to write and organize code.
+
+## How many types paradiams in Programming ?
+
+- There a several types of paradiam in Programming.
+  1.  Procudural Programming Paradiam.
+  2.  Declarative Programming.
+  3.  Functional Programming
+  4.  Object Oriented Programming
+  5.  Event Driven programming
+
+## Building Block of OOP:
+
+- Inheritance
+- Polymorphism
+- Abstruction
+- Encampsulation
+
+## Class In JavaScript & TypeScript :
+
+- create a `class` by using `class` keyword.
+- classname startwith `Capitalital Letter`
+- in class body define the class `variable` and we also initilize them
+- then `create` a `contructor` which helps dynamically initilize or `assign`
+  value
+- we can update any `variale` of class in `contructor` with `this.variable` =
+  `contructorParameter`
+- Then out side of `constructor`, we can define `common function for class `
+- we also access any `variable` of `class` into `function` with
+  `this.variableName`
+- Example :
+
+```ts
+class Animal {
+  public name: string;
+  public species: string;
+  public sound: string;
+
+  // initialize value with constructor
+  constructor(name: string, species: string, sound: string) {
+    this.name = name;
+    this.species = species;
+    this.sound = sound;
+  }
+
+  // function of class:
+  makeSound() {
+    console.log(`The ${this.name} says ${this.sound}`);
+  }
+}
+```
+
+- Now We can create an instance of class and use that :
+- Example:
+
+```ts
+// create an isntance for men:
+const men = new Animal("Mostafizur Rahaman", "men", "bok bok");
+men.makeSound();
+console.log(men);
+
+// create an instance for cat:
+const cat = new Animal("Pusi Cat", "cat", "meaw meaw");
+console.log(cat);
+cat.makeSound();
+```
+
+## Use `Parameter properties` in Class:
+
+- `Parameter properties` in `TypeScript` allow us to `simplify` our
+  `property declarations` by `initializing` them `directly` in the
+  `class constructor`
+- when we add an ` access modifier` `in front of parameter` of
+  `constructor parameter` `typeScript compiler` will automatically initialize
+  the `corresponding property` with the provided value.
+- And we don't need use `this.variable = parameter`.
+  `TypeScript automitically initialize the value `
+- Example:
+
+```ts
+// the previous class and this one works same:
+class Animal {
+  constructor(
+    public name: string,
+    public species: string,
+    public sound: string
+  ) {}
+
+  makeSound() {
+    console.log(`The ${this.name} says ${this.sound} `);
+  }
+}
+```
+
+## `Inheritance` In `JavaScript & TypeScript`-
+
+- JavaScript uses `prototype based inheritance`. Every object has a prototype,
+  and when a method of the object is called then JavaScript tries to find the
+  right function to execute from the prototype obj.
+
+- The `JavaScript inheritance` is a `mechanism` that allows us to
+  `create new classes` on the basis of `already existing classes`.
+- It provides `flexibility` to the `child class `to reuse the `methods` and
+  `variables` of a `parent class`
+
+- We don't need to `initialize` `Parent` class variable in `children class`
+- But we need to define a new `constructor` for children with `every` parameter
+  of `parent` and `chlidren`
+- we use `extends` `keyword` to `inherit` any `class`
+- call `super` to send the `children` `constructor` value to `parenet`
+- Example :
+
+````ts
+    // create a common class for every person:
+   class Person {
+      name: string;
+      age: number;
+      email: string;
+
+      constructor(name: string, age: number, email: string) {
+         this.name = name;
+         this.age = age;
+         this.email = email;
+      }
+
+      sleeping(hour: number) {
+         console.log(`I will sleeping for ${hour}`);
+      }
+   }
+
+   // Create a student class:
+   class Student extends Person {
+      roll: number;
+
+      constructor(name: string, age: number, roll: number, email: string) {
+         super(name, age, email);
+         this.roll = roll;
+      }
+   }
+
+   const student1 = new Student("mostafiuar", 2, 2, "mostafizur rahaman");
+   student1.sleeping(2);
+
+   console.log(student1);
+
+   class Teacher extends Person {
+      designation: string;
+
+      constructor(
+         name: string,
+         age: number,
+         email: string,
+         designation: string
+      ) {
+         super(name, age, email);
+         this.designation = designation;
+      }
+
+      teaching(subject: string) {
+         console.log(`I am a teacher of ${subject}`);
+      }
+   }
+
+   const teacher1 = new Teacher(
+      "Riaz Uddin",
+      35,
+      "riaz@gmail.com",
+      "head teacher"
+   );
+   console.log(teacher1);
+   teacher1.teaching("English");
+   teacher1.sleeping(4);
+
+   // create another children with by inheriting Person class
+   class WebDev extends Person {
+      skills: string[];
+
+      constructor(name: string, age: number, email: string, skills: string[]) {
+         super(name, age, email);
+         this.skills = skills;
+      }
+
+      coding() {
+         console.log(`${this.name} code with ${this.skills.join(" * ")}`);
+      }
+   }
+
+   const webdev1 = new WebDev("Mostafizur Rahaman", 20, "mos@gmail.com", [
+      "react",
+      "nextJs",
+      "javaScript",
+      "TypeScript",
+   ]);
+
+   console.log(webdev1);
+
+   webdev1.coding();
+
+
+
+]```
+````
