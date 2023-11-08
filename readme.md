@@ -2159,93 +2159,629 @@ class Animal {
 - call `super` to send the `children` `constructor` value to `parenet`
 - Example :
 
-````ts
-    // create a common class for every person:
-   class Person {
-      name: string;
-      age: number;
-      email: string;
+```ts
+// create a common class for every person:
+class Person {
+  name: string;
+  age: number;
+  email: string;
 
-      constructor(name: string, age: number, email: string) {
-         this.name = name;
-         this.age = age;
-         this.email = email;
+  constructor(name: string, age: number, email: string) {
+    this.name = name;
+    this.age = age;
+    this.email = email;
+  }
+
+  sleeping(hour: number) {
+    console.log(`I will sleeping for ${hour}`);
+  }
+}
+
+// Create a student class:
+class Student extends Person {
+  roll: number;
+
+  constructor(name: string, age: number, roll: number, email: string) {
+    super(name, age, email);
+    this.roll = roll;
+  }
+}
+
+const student1 = new Student("mostafiuar", 2, 2, "mostafizur rahaman");
+student1.sleeping(2);
+
+console.log(student1);
+
+class Teacher extends Person {
+  designation: string;
+
+  constructor(name: string, age: number, email: string, designation: string) {
+    super(name, age, email);
+    this.designation = designation;
+  }
+
+  teaching(subject: string) {
+    console.log(`I am a teacher of ${subject}`);
+  }
+}
+
+const teacher1 = new Teacher(
+  "Riaz Uddin",
+  35,
+  "riaz@gmail.com",
+  "head teacher"
+);
+console.log(teacher1);
+teacher1.teaching("English");
+teacher1.sleeping(4);
+
+// create another children with by inheriting Person class
+class WebDev extends Person {
+  skills: string[];
+
+  constructor(name: string, age: number, email: string, skills: string[]) {
+    super(name, age, email);
+    this.skills = skills;
+  }
+
+  coding() {
+    console.log(`${this.name} code with ${this.skills.join(" * ")}`);
+  }
+}
+
+const webdev1 = new WebDev("Mostafizur Rahaman", 20, "mos@gmail.com", [
+  "react",
+  "nextJs",
+  "javaScript",
+  "TypeScript",
+]);
+
+console.log(webdev1);
+
+webdev1.coding();
+```
+
+## `Type Guard` In typeScript:
+
+- ### `typeof` guard:
+
+  - The ` typeof`` type guard ` checks whether a `variable` is of a `certain`
+    `primitive type`, such as `string`, `number`, `boolean`, or `symbol`.
+  - Example :
+
+  ```ts
+  const getAddNumberORString = (
+    a: number | string,
+    b: number | string
+  ): number | string => {
+    if (typeof a === "number" && typeof b === "number") {
+      return a + b;
+    } else {
+      return a.toString() + b.toString();
+    }
+  };
+  ```
+
+- ### `in` guard:
+
+  - The `in` type guard check when we need to check a property is avialble
+    into an `object`.
+  - `in` guard used to check , is the `specific property` aviable into
+    `object` or `not`?
+  - Example:
+
+  ```ts
+  // type guard in :
+
+  type TNormalPerson = {
+    name: string;
+  };
+
+  type TBipPerson = {
+    email: string;
+  } & TNormalPerson;
+
+  const normalPerson: TNormalPerson = { name: "Mostafizur rahaman " };
+  const adminPerson: TBipPerson = { name: "Mostafizur", email: "m@gmail.com" };
+
+  const getAccess = (person: TBipPerson | TNormalPerson): string => {
+    if ("email" in person) {
+      return `Congratulations, ${person.name} you can get access`;
+    } else {
+      return `So Sad You can't get access `;
+    }
+  };
+
+  const out1: string = getAccess(normalPerson);
+  const out2: string = getAccess(adminPerson);
+
+  console.log(out1);
+  console.log(out2);
+  ```
+
+- `instanceof` guard:
+
+  - `instanceof` guard used when dealing with classes or their instance.
+  - Example:
+
+  ```ts
+  class Animal {
+    name: string;
+    species: string;
+    sound: string;
+
+    constructor(name: string, species: string, sound: string) {
+      this.name = name;
+      this.species = species;
+      this.sound = sound;
+    }
+
+    makeSound() {
+      console.log(`The ${this.name} says ${this.sound}`);
+    }
+  }
+  // create a  children class for dog by extending Animal
+  class Dog extends Animal {
+    constructor(name: string, species: string, sound: string) {
+      super(name, species, sound);
+    }
+
+    // make dog sound:
+    makeBark() {
+      console.log(`The ${this.name} is Barking `);
+    }
+  }
+
+  // create a children class for cat extending Animal:
+  class Cat extends Animal {
+    constructor(name: string, species: string, sound: string) {
+      super(name, species, sound);
+    }
+
+    // make sound for cat;
+    makeMeaw() {
+      console.log(`The ${this.name} says ${this.sound}`);
+    }
+  }
+
+  // create an instance for dog
+  const dog = new Dog("Shadow Dog", "dog", "gew gew");
+
+  // create an instance for cat:
+  const cat = new Dog("Black Cat", "cat", "meaw meaw");
+
+  // create another instance for pig:
+  const pig = new Animal("Pink Pig", "pig", "make some sweet sounds");
+
+  const getAnimalAndMakeSound = (animal: Animal) => {
+    if (animal instanceof Dog) {
+      animal.makeBark();
+    } else if (animal instanceof Cat) {
+      animal.makeMeaw();
+    } else {
+      animal.makeSound();
+    }
+  };
+
+  getAnimalAndMakeSound(dog);
+  getAnimalAndMakeSound(cat);
+  getAnimalAndMakeSound(pig);
+  ```
+
+## `is` predicate in typeScript.
+
+- `is` predicate is used to define a user defined type when the `function`
+  `return type` is boolean.
+
+- syntax:
+
+```ts
+variable as Type;
+```
+
+- Example :
+
+```ts
+// create a animal:
+class Animal {
+  name: string;
+  species: string;
+  sound: string;
+
+  constructor(name: string, species: string, sound: string) {
+    this.name = name;
+    this.species = species;
+    this.sound = sound;
+  }
+
+  makeSound() {
+    console.log(`The ${this.name} says ${this.sound}`);
+  }
+}
+// create a  children class for dog by extending Animal
+class Dog extends Animal {
+  constructor(name: string, species: string, sound: string) {
+    super(name, species, sound);
+  }
+
+  // make dog sound:
+  makeBark() {
+    console.log(`The ${this.name} is Barking `);
+  }
+}
+
+// create a children class for cat extending Animal:
+class Cat extends Animal {
+  constructor(name: string, species: string, sound: string) {
+    super(name, species, sound);
+  }
+
+  // make sound for cat;
+  makeMeaw() {
+    console.log(`The ${this.name} says ${this.sound}`);
+  }
+}
+
+// create an instance for dog
+const dog = new Dog("Shadow Dog", "dog", "gew gew");
+
+// create an instance for cat:
+const cat = new Dog("Black Cat", "cat", "meaw meaw");
+
+// create another instance for pig:
+const pig = new Animal("Pink Pig", "pig", "make some sweet sounds");
+
+// we can handle smartly handle check type by using function:
+const isDog = (animal: Animal): animal is Dog => {
+  return animal instanceof Dog;
+};
+
+// here used is predicate:
+const isCat = (animal: Animal): animal is Cat => {
+  return animal instanceof Cat;
+};
+
+const getAnimalAndMakeSound = (animal: Animal) => {
+  if (isDog(animal)) {
+    animal.makeBark();
+  } else if (isCat(animal)) {
+    animal.makeMeaw();
+  } else {
+    animal.makeSound();
+  }
+};
+
+getAnimalAndMakeSound(cat);
+getAnimalAndMakeSound(dog);
+getAnimalAndMakeSound(pig);
+```
+
+## Access Modifire in `Class`
+
+- ### Public Modifier:
+
+  - `Public`: Generally all `class` properties are `public`.
+  - `public` properties are `accessiable` outside of class.
+  - we don't need `use` explicitly `public` modifier.
+  - Example :
+
+  ```ts
+  class BankAccount {
+    public id: number;
+    public name: string;
+    public balance: number;
+
+    constructor(id: number, name: string, balance: number) {
+      this.id = id;
+      this.name = name;
+      this.balance = balance;
+    }
+  }
+
+  const myBankAccount = new BankAccount(2, "Mostafizur Rahaman", 2000);
+
+  // public properties are changeable from outside of class .
+  myBankAccount.id = 20;
+  myBankAccount.balance = 20;
+  console.log(myBankAccount);
+  ```
+
+- ### `Readonly` modifier : Readonly `modifier ` makes properties readonly.
+
+  - `readonly` properties only assignable when we create `new instance`.
+  - we cann't modified the `property`.
+  - Example :
+
+  ```ts
+  class BankAccount {
+    public readonly id: number;
+    public name: string;
+    public balance: number;
+
+    constructor(id: number, name: string, balance: number) {
+      this.id = id;
+      this.name = name;
+      this.balance = balance;
+    }
+  }
+
+  const myBankAccount = new BankAccount(2, "Mostafizur Rahaman", 2000);
+
+  // public properties are changeable from outside of class .
+
+  myBankAccount.id = 20; //cannot assign to 'id' because it is a read-only property.
+
+  myBankAccount.balance = 20;
+  console.log(myBankAccount);
+  ```
+
+  - ### `Private`:
+
+    - `Private` modifier makes properties `unaccesable` from `outside` of
+      `class`
+    - `private` property only `accessable` into `class`
+    - we can access private property from `derived class` or
+      `inherited class `
+    - conbention: start private property name with `_` like :
+      `private _balance : number`
+    - Example :
+
+    ```ts
+    class BankAccount {
+      private readonly id: number;
+      public name: string;
+      private _balance: number;
+
+      constructor(id: number, name: string, _balance: number) {
+        this.id = id;
+        this.name = name;
+        this._balance = _balance;
+      }
+    }
+
+    const myBankAccount = new BankAccount(2, "Mostafizur Rahaman", 2000);
+
+    // we cann't access private properties from outside of  Class
+
+    myBankAccount._balance = 20; // Errors: Because '_balance' is private
+
+    console.log(myBankAccount);
+    ```
+
+  - ### `Protected:`
+
+    - `protected` property also don't accessiable from outside of `class`
+    - `protected` property only `assiable` on class on `derived class ` or
+      `inherited class`
+    - Example:
+
+    ```ts
+    class BankAccount {
+      readonly id: number;
+      public name: string;
+      protected _balance: number;
+
+      constructor(id: number, name: string, _balance: number) {
+        this.id = id;
+        this.name = name;
+        this._balance = _balance;
+      }
+    }
+
+    class ChildrenBankAccount extends BankAccount {
+      constructor(_id: number, name: string, _balance: number) {
+        super(_id, name, _balance);
       }
 
-      sleeping(hour: number) {
-         console.log(`I will sleeping for ${hour}`);
+      updateBalance(amount: number) {
+        // protected type accessible into Derived class
+        this._balance = this._balance + amount;
       }
-   }
+    }
 
-   // Create a student class:
-   class Student extends Person {
-      roll: number;
+    const myBankAccount = new BankAccount(2, "Mostafizur Rahaman", 2000);
 
-      constructor(name: string, age: number, roll: number, email: string) {
-         super(name, age, email);
-         this.roll = roll;
-      }
-   }
+    const myChildrenAccount = new ChildrenBankAccount(
+      4,
+      "Mostafizur Rahaman",
+      2000
+    );
 
-   const student1 = new Student("mostafiuar", 2, 2, "mostafizur rahaman");
-   student1.sleeping(2);
+    // we cann't access proteched properties from outside of  Class
+    myBankAccount._balance = 20; // Errors: Because '_balance' is private
 
-   console.log(student1);
+    myChildrenAccount.updateBalance(400);
+    console.log(myChildrenAccount);
+    ```
 
-   class Teacher extends Person {
-      designation: string;
+## `Getter` & `Setter` in JavaScript `Class`:
 
-      constructor(
-         name: string,
-         age: number,
-         email: string,
-         designation: string
-      ) {
-         super(name, age, email);
-         this.designation = designation;
-      }
+- If we define any `function` `getter` & `setter` method, we can access the
+  `function` from class `instance` as property.
+- ### Getter : `getter function` start with `get` keyword:
 
-      teaching(subject: string) {
-         console.log(`I am a teacher of ${subject}`);
-      }
-   }
+  - By using getter we can get data from class.
+  - we can access getter functon as `property of class instance`
+  - Example:
 
-   const teacher1 = new Teacher(
-      "Riaz Uddin",
-      35,
-      "riaz@gmail.com",
-      "head teacher"
-   );
-   console.log(teacher1);
-   teacher1.teaching("English");
-   teacher1.sleeping(4);
+  ```ts
+  // Getter & Setter :
 
-   // create another children with by inheriting Person class
-   class WebDev extends Person {
-      skills: string[];
+  class Person {
+    public name: string;
+    public email: string;
+    public age: number;
 
-      constructor(name: string, age: number, email: string, skills: string[]) {
-         super(name, age, email);
-         this.skills = skills;
-      }
+    constructor(name: string, email: string, age: number) {
+      this.name = name;
+      this.email = email;
+      this.age = age;
+    }
 
-      coding() {
-         console.log(`${this.name} code with ${this.skills.join(" * ")}`);
-      }
-   }
+    // getter and setter :
 
-   const webdev1 = new WebDev("Mostafizur Rahaman", 20, "mos@gmail.com", [
-      "react",
-      "nextJs",
-      "javaScript",
-      "TypeScript",
-   ]);
+    // getter with get : -
+    get getAge() {
+      return `${this.name}'s age is ${this.age}`;
+    }
 
-   console.log(webdev1);
+    // setter function
+    set setAge(age: number) {
+      this.age = this.age + age;
+    }
+  }
 
-   webdev1.coding();
+  const person1 = new Person("Mostafizur Rahaman", "mos@gmail.com", 20);
+  const person2 = new Person("Ratul hossain", "ratul@gmail.com", 15);
+  const person3 = new Person("Rakib Hossain", "m@gmail.com", 20);
 
+  // create function to get instance age :
 
+  function getPersonAge(person: Person) {
+    // access getter function as property :
+    return person.getAge;
+  }
 
-]```
-````
+  const a1 = getPersonAge(person1);
+  const b1 = getPersonAge(person2);
+  const c1 = getPersonAge(person3);
+  console.log(a1, b1, c1);
+  ```
+
+- ### `Setter`: setter function start with `set function` keyword.
+
+  - we can access the setter `function` as property of `class instance`
+  - Example:
+
+  ```ts
+  // Getter & Setter :
+
+  class Person {
+    public name: string;
+    public email: string;
+    public age: number;
+
+    constructor(name: string, email: string, age: number) {
+      this.name = name;
+      this.email = email;
+      this.age = age;
+    }
+
+    // getter and setter :
+
+    // getter with get : -
+    get getAge() {
+      return `${this.name}'s age is ${this.age}`;
+    }
+
+    set setAge(age: number) {
+      this.age = this.age + age;
+    }
+  }
+
+  const person1 = new Person("Mostafizur Rahaman", "mos@gmail.com", 20);
+  const person2 = new Person("Ratul hossain", "ratul@gmail.com", 15);
+  const person3 = new Person("Rakib Hossain", "m@gmail.com", 20);
+
+  // setter function in  javaScript :
+  person1.setAge = 5;
+  person1.setAge = 5;
+  person2.setAge = 40;
+  person2.setAge = 30;
+  person3.setAge = 1;
+  person3.setAge = 50;
+
+  console.log(person1.age);
+  console.log(person2.age);
+  console.log(person3.age);
+  ```
+
+- ## `Static` :
+- To create a `static variable` in `javaScript class` , you can use
+  `static keywrod` before `variable name`
+- `Static method` convert the variable only for class .
+- `static variables ` are accessiable directly as `Class Property`. You can not
+  access the `variable` with `instance`
+
+  ```ts
+  class Sleep {
+    public static sleepingHours: number = 8;
+
+    increment() {
+      // when we use static variable we need access the variable with ClassName.propertyName
+      Sleep.sleepingHours = Sleep.sleepingHours + 1;
+    }
+  }
+  ```
+
+- when update `static` variable of `class` with `one` instance its will update
+  the property for all `instance` of that class.
+- Static `variable ` allocate the `same memory location`
+- // we need to access the static variable as Class property . we can not find
+  the property as in instance. const hours: number = Sleep.sleepingHours;
+  console.log(hours);
+
+  ```ts
+  class Sleep {
+    public static sleepingHours: number = 8;
+
+    // increment sleeping hours:
+    increment() {
+      // when we use static variable we need access the variable with ClassName.propertyName
+      Sleep.sleepingHours = Sleep.sleepingHours + 1;
+    }
+
+    // decrement Sleeping hours:
+    decrement() {
+      Sleep.sleepingHours = Sleep.sleepingHours - 1;
+    }
+  }
+
+  // we need to access the static variable as Class property . we can not find the property as  in instance.
+  const hours: number = Sleep.sleepingHours;
+  console.log(hours);
+
+  // create two instance to update the static variable:
+  const sleep1 = new Sleep();
+  const sleep2 = new Sleep();
+
+  // here  we have two instance:
+  sleep1.increment(); // increment for sleep1; but it update for all instance or full class .
+  sleep2.increment();
+  ```
+
+- To create a static method in a JavaScript class, you can use the static
+  keyword before the method name.
+- Static methods are called directly on the class itself, without creating an
+  instance of the class.
+
+  ```ts
+  class Counter {
+    // static modifier use one memory Reference for variable.
+    // from any instance we can change value , it's will be change for every instance. This main after using static, static makes the variable only for Class.
+    // After  make a variable static , we we need access the variable with className not this keyword.
+    public static counter: number = 0;
+
+    static increment() {
+      Counter.counter = Counter.counter + 1;
+    }
+
+    static decrement() {
+      Counter.counter = Counter.counter - 1;
+    }
+  }
+
+  // create an instance for counter :
+  const one = new Counter();
+  const two = new Counter();
+
+  // increment counter for one instance:
+  Counter.increment();
+  Counter.increment();
+
+  //  we need to call the increment with Class method not instance method. After making static it's only accessible with className.
+  Counter.increment();
+
+  console.log(Counter.counter);
+  console.log(Counter.counter);
+  ```
